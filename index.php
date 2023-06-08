@@ -87,68 +87,7 @@
                     <hr>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Apellidos</th>
-                                <th scope="col">Direccion</th>
-                                <th scope="col">Edad</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Horario entrada</th>
-                                <th scope="col">Team</th>
-                                <th scope="col">Trainer</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            if (isset($_POST['crear'])) {
-                                $nombre = $_POST["nombre"];
-                                $apellidos = $_POST["apellidos"];
-                                $direccion = $_POST["direccion"];
-                                $edad = $_POST["edad"];
-                                $email = $_POST["email"];
-                                $horario = $_POST["horario"];
-                                $team = $_POST["team"];
-                                $trainer = $_POST["trainer"];
-                                $cedula = $_POST["cedula"];
-                            }
-                            ?>
-                            <tr>
-                                <?php
-
-                                ?>
-                                <td>
-                                    <?php echo $nombre; ?>
-                                </td>
-                                <td>
-                                    <?php echo $apellidos; ?>
-                                </td>
-                                <td>
-                                    <?php echo $direccion; ?>
-                                </td>
-                                <td>
-                                    <?php echo $edad; ?>
-                                </td>
-                                <td>
-                                    <?php echo $email; ?>
-                                </td>
-                                <td>
-                                    <?php echo $horario; ?>
-                                </td>
-                                <td>
-                                    <?php echo $team; ?>
-                                </td>
-                                <td>
-                                    <?php echo $trainer; ?>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+           
         </div>
 
     </form>
@@ -161,10 +100,52 @@
 
 
 <?php
-$credenciales["http"]["method"] = "POST";
-$credenciales["http"]["header"] = "Content-type: application/json";
+
+
+// Función para realizar una solicitud POST a la API ENVIAR AL SERVIDOR 
+function postData($url, $data)
+{
+    $credenciales["http"]["method"] = "POST";
+    $credenciales["http"]["header"] = "Content-type: application/json";
+    $data = json_encode($data);
+    $credenciales["http"]["content"] = $data;
+    $config = stream_context_create($credenciales);
+    return file_get_contents($url, false, $config);
+}
+
+
+// Función para realizar una solicitud GET a la API OBTENER
+function getData($url)
+{
+    $credenciales["http"]["method"] = "GET";
+    $config = stream_context_create($credenciales);
+    return file_get_contents($url, false, $config);
+}
+
+// Función para realizar una solicitud PUT a la API EDITAR
+function putData($url, $data)
+{
+    $credenciales["http"]["method"] = "PUT";
+    $credenciales["http"]["header"] = "Content-type: application/json";
+    $data = json_encode($data);
+    $credenciales["http"]["content"] = $data;
+    $config = stream_context_create($credenciales);
+    return file_get_contents($url, false, $config);
+}
+
+// Función para realizar una solicitud DELETE a la API ELIMINAR
+function deleteData($url)
+{
+    $credenciales["http"]["method"] = "DELETE";
+    $config = stream_context_create($credenciales);
+    return file_get_contents($url, false, $config);
+}
+
+
+$url = "https://6480e391f061e6ec4d49fed8.mockapi.io/informacion/";
 
 if (isset($_POST['crear'])) {
+
     $nombre = $_POST["nombre"];
     $apellidos = $_POST["apellidos"];
     $direccion = $_POST["direccion"];
@@ -175,7 +156,7 @@ if (isset($_POST['crear'])) {
     $trainer = $_POST["trainer"];
     $cedula = $_POST["cedula"];
 
-    $data = [
+    $newData = [
         "nombre" => $nombre,
         "apellido" => $apellidos,
         "edad" => $edad,
@@ -187,11 +168,51 @@ if (isset($_POST['crear'])) {
         "trainer" => $trainer,
     ];
 
-    $data = json_encode($data); //convertir la matriz $data en un archivo json
-    $credenciales["http"]["content"] = $data;
-    $config = stream_context_create($credenciales);
+    $response = postData($url, $newData);
 
-    $_DATA = file_get_contents("https://6480e391f061e6ec4d49fed8.mockapi.io/informacion", false, $config);
 
+
+}
+
+// Obtener los datos 
+$data = getData($url);
+// echo "Datos después de crear el registro:<br>";
+// print_r($data);
+echo "<br><br>";
+$arrayAsociativo = json_decode($data, true);
+// Mostrar el array asociativo
+// print_r($arrayAsociativo);
+
+foreach ($arrayAsociativo as $item) {
+    echo '<div class="row">
+            <div class="col-lg-6">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Apellidos</th>
+                            <th scope="col">Direccion</th>
+                            <th scope="col">Edad</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Horario entrada</th>
+                            <th scope="col">Team</th>
+                            <th scope="col">Trainer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>'.$item['nombre'].'</td>
+                            <td>'.$item['apellido'].'</td>
+                            <td>'.$item['direccion'].'</td>
+                            <td>'.$item['edad'].'</td>
+                            <td>'.$item['email'].'</td>
+                            <td>'.$item['horario'].'</td>
+                            <td>'.$item['team'].'</td>
+                            <td>'.$item['trainer']. '&nbsp &nbsp <input type="button" value="↑" name="editar"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>';
 }
 ?>
