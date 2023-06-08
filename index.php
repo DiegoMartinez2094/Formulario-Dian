@@ -145,6 +145,8 @@ function deleteData($url)
 $url = "https://6480e391f061e6ec4d49fed8.mockapi.io/informacion/";
 
 if (isset($_POST['crear'])) {
+    
+
 
     $nombre = $_POST["nombre"];
     $apellidos = $_POST["apellidos"];
@@ -175,18 +177,16 @@ if (isset($_POST['crear'])) {
 }
 
 // Obtener los datos 
-$data = getData($url);
+$data = getData($url); 
 // echo "Datos después de crear el registro:<br>";
 // print_r($data);
-echo "<br><br>";
-$arrayAsociativo = json_decode($data, true);
+// echo "<br><br>";
+$arrayAsociativo = json_decode($data, true); //convertir string a array 
 // Mostrar el array asociativo
 // print_r($arrayAsociativo);
-
-foreach ($arrayAsociativo as $item) {
-    echo '<div class="row">
+echo '<div class="row">
             <div class="col-lg-6">
-                <table class="table">
+                <table class="table" style="margin-left:200px">
                     <thead>
                         <tr>
                             <th scope="col">Nombre</th>
@@ -199,6 +199,14 @@ foreach ($arrayAsociativo as $item) {
                             <th scope="col">Trainer</th>
                         </tr>
                     </thead>
+                    
+                </table>
+            </div>
+        </div>';
+foreach ($arrayAsociativo as $item) {
+    echo '<div class="row">
+            <div class="col-lg-6">
+                <table class="table" style="margin-left:200px">
                     <tbody>
                         <tr>
                             <td>'.$item['nombre'].'</td>
@@ -215,5 +223,16 @@ foreach ($arrayAsociativo as $item) {
             </div>
         </div>';
 }
+
+if (isset($_POST['buscar'])) { 
+   $cedula = $_POST["cedula"];
+   $data= getData($url);
+   $arrayAsociativo = json_decode($data, true);
+
+
+
+}
+
+
 
 ?>
