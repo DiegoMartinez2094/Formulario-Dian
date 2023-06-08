@@ -11,15 +11,7 @@
 </head>
 
 <body>
-    <form>
-
-
-
-
-
-
-
-
+    <form method="POST">
         <div class="container">
             <br><br>
             <div class="row">
@@ -32,7 +24,7 @@
                     <input type="text" name="nombre" placeholder="Nombre">
                 </div>
                 <div class="col-lg-3">
-                   <h2>Campuslands</h2> 
+                    <h2>Campuslands</h2>
                 </div>
                 <br /><br />
             </div>
@@ -59,14 +51,15 @@
             </div>
             <div class="row">
                 <div class="col-lg-3">
-                    <input type="time" name="horario" placeholder="Horario de entrada"> <label>Horario de entrada</label>
+                    <input type="time" name="horario" placeholder="Horario de entrada"> <label>Horario de
+                        entrada</label>
 
                 </div>
                 <div class="col-lg-1">
-                    <input type="button" value="✔">
+                    <input type="submit" value="✔" name="crear">
                 </div>
                 <div class="col-lg-1">
-                    <input type="button" value="X"> <br /><br />
+                    <input type="button" value="X" name="eliminar"> <br /><br />
                 </div>
             </div>
 
@@ -75,10 +68,10 @@
                     <input type="text" name="team" placeholder="Team">
                 </div>
                 <div class="col-lg-1">
-                    <input type="button" value="✎">
+                    <input type="button" value="✎" name="editar">
                 </div>
                 <div class="col-lg-1">
-                    <input type="button" value="search">
+                    <input type="button" value="search" name="buscar">
                 </div> <br /><br />
             </div>
             <div class="row">
@@ -103,7 +96,6 @@
                                 <th scope="col">Apellidos</th>
                                 <th scope="col">Direccion</th>
                                 <th scope="col">Edad</th>
-                                <th scope="col">Direccion</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Horario entrada</th>
                                 <th scope="col">Team</th>
@@ -111,11 +103,47 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <?php
+                            if (isset($_POST['crear'])) {
+                                $nombre = $_POST["nombre"];
+                                $apellidos = $_POST["apellidos"];
+                                $direccion = $_POST["direccion"];
+                                $edad = $_POST["edad"];
+                                $email = $_POST["email"];
+                                $horario = $_POST["horario"];
+                                $team = $_POST["team"];
+                                $trainer = $_POST["trainer"];
+                                $cedula = $_POST["cedula"];
+                            }
+                            ?>
                             <tr>
-                                
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
+                                <?php
+
+                                ?>
+                                <td>
+                                    <?php echo $nombre; ?>
+                                </td>
+                                <td>
+                                    <?php echo $apellidos; ?>
+                                </td>
+                                <td>
+                                    <?php echo $direccion; ?>
+                                </td>
+                                <td>
+                                    <?php echo $edad; ?>
+                                </td>
+                                <td>
+                                    <?php echo $email; ?>
+                                </td>
+                                <td>
+                                    <?php echo $horario; ?>
+                                </td>
+                                <td>
+                                    <?php echo $team; ?>
+                                </td>
+                                <td>
+                                    <?php echo $trainer; ?>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -133,7 +161,37 @@
 
 
 <?php
+$credenciales["http"]["method"] = "POST";
+$credenciales["http"]["header"] = "Content-type: application/json";
 
+if (isset($_POST['crear'])) {
+    $nombre = $_POST["nombre"];
+    $apellidos = $_POST["apellidos"];
+    $direccion = $_POST["direccion"];
+    $edad = $_POST["edad"];
+    $email = $_POST["email"];
+    $horario = $_POST["horario"];
+    $team = $_POST["team"];
+    $trainer = $_POST["trainer"];
+    $cedula = $_POST["cedula"];
 
+    $data = [
+        "nombre" => $nombre,
+        "apellido" => $apellidos,
+        "edad" => $edad,
+        "cedula" => $cedula,
+        "direccion" => $direccion,
+        "email" => $email,
+        "horario" => $horario,
+        "team" => $team,
+        "trainer" => $trainer,
+    ];
 
+    $data = json_encode($data); //convertir la matriz $data en un archivo json
+    $credenciales["http"]["content"] = $data;
+    $config = stream_context_create($credenciales);
+
+    $_DATA = file_get_contents("https://6480e391f061e6ec4d49fed8.mockapi.io/informacion", false, $config);
+
+}
 ?>
