@@ -1,0 +1,1 @@
+Creacion de un formulario que implemente metodos de POST, GET, DELETE y PUT para envio, optencion, eliminacion y editacion de datos en una base de datos, en este casa usamos Mockapi para simular una base de datos.
