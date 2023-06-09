@@ -59,7 +59,7 @@
                     <input type="submit" value="✔" name="crear">
                 </div>
                 <div class="col-lg-1">
-                    <input type="button" value="X" name="eliminar"> <br /><br />
+                    <input type="submit" value="X" name="eliminar"> <br /><br />
                 </div>
             </div>
 
@@ -68,10 +68,10 @@
                     <input type="text" name="team" placeholder="Team">
                 </div>
                 <div class="col-lg-1">
-                    <input type="button" value="✎" name="editar">
+                    <input type="submit" value="✎" name="editar">
                 </div>
                 <div class="col-lg-1">
-                    <input type="button" value="search" name="buscar">
+                    <input type="submit" value="search" name="buscar">
                 </div> <br /><br />
             </div>
             <div class="row">
@@ -87,7 +87,7 @@
                     <hr>
                 </div>
             </div>
-           
+
         </div>
 
     </form>
@@ -145,7 +145,7 @@ function deleteData($url)
 $url = "https://6480e391f061e6ec4d49fed8.mockapi.io/informacion/";
 
 if (isset($_POST['crear'])) {
-    
+
 
 
     $nombre = $_POST["nombre"];
@@ -177,7 +177,7 @@ if (isset($_POST['crear'])) {
 }
 
 // Obtener los datos 
-$data = getData($url); 
+$data = getData($url);
 // echo "Datos después de crear el registro:<br>";
 // print_r($data);
 // echo "<br><br>";
@@ -209,14 +209,14 @@ foreach ($arrayAsociativo as $item) {
                 <table class="table" style="margin-left:200px">
                     <tbody>
                         <tr>
-                            <td>'.$item['nombre'].'</td>
-                            <td>'.$item['apellido'].'</td>
-                            <td>'.$item['direccion'].'</td>
-                            <td>'.$item['edad'].'</td>
-                            <td>'.$item['email'].'</td>
-                            <td>'.$item['horario'].'</td>
-                            <td>'.$item['team'].'</td>
-                            <td>'.$item['trainer']. '&nbsp &nbsp <input type="button" value="↑" name="editar"></td>
+                            <td>' . $item['nombre'] . '</td>
+                            <td>' . $item['apellido'] . '</td>
+                            <td>' . $item['direccion'] . '</td>
+                            <td>' . $item['edad'] . '</td>
+                            <td>' . $item['email'] . '</td>
+                            <td>' . $item['horario'] . '</td>
+                            <td>' . $item['team'] . '</td>
+                            <td>' . $item['trainer'] . '&nbsp &nbsp <input type="button" value="↑" name="editar"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -224,15 +224,18 @@ foreach ($arrayAsociativo as $item) {
         </div>';
 }
 
-if (isset($_POST['buscar'])) { 
-   $cedula = $_POST["cedula"];
-   $data= getData($url);
-   $arrayAsociativo = json_decode($data, true);
+if (isset($_POST['buscar'])) {
+    $cedula = $_POST["cedula"];
 
-
-
+    $url = "https://6480e391f061e6ec4d49fed8.mockapi.io/informacion/?cedula=" . urlencode($cedula);
+    $response = file_get_contents($url);
+    $data = json_decode($response, true);
+    $data = getData($url);
+    $arrayAsociativo = json_decode($data, true);
+    print_r($arrayAsociativo);
+    echo'<br>';
+    echo gettype($arrayAsociativo);
 }
-
 
 
 ?>
