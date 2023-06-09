@@ -9,7 +9,27 @@
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <title>formulario</title>
 </head>
-
+<?php 
+//funcion buscar en informacion 
+if (isset($_POST['buscar'])) {
+    $cedula = $_POST['cedula'];
+    $url = "https://6480e391f061e6ec4d49fed8.mockapi.io//informacion?cedula=" . urlencode($cedula);
+    $response = file_get_contents($url);
+    $data = json_decode($response, true);
+    if (!empty($data)) {
+        $nombre = $data[0]['nombre'];
+        $apellido = $data[0]['apellido'];
+        $direccion = $data[0]['direccion'];
+        $edad = $data[0]['edad'];
+        $email = $data[0]['email'];
+        $horario = $data[0]['horario'];
+        $team = $data[0]['team'];
+        $trainer = $data[0]['trainer'];
+    }
+    if (empty($data))  
+    echo '<script language="javascript">alert("No se encontraron resultados.");</script>';  
+    }
+?>
 <body>
     <form method="POST">
         <div class="container">
@@ -21,7 +41,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-3">
-                    <input type="text" name="nombre" placeholder="Nombre">
+                    <input type="text" name="nombre" placeholder="Nombre" value="<?php echo isset($nombre) ? $nombre : ''; ?>" >
                 </div>
                 <div class="col-lg-3">
                     <h2>Campuslands</h2>
@@ -30,18 +50,18 @@
             </div>
             <div class="row">
                 <div class="col-lg-3">
-                    <input type="text" name="apellidos" placeholder="Apellidos">
+                    <input type="text" name="apellidos" placeholder="Apellidos" value="<?php echo isset($apellido) ? $apellido : ''; ?>">
                 </div>
                 <div class="col-lg-3">
-                    <input type="number" name="edad" placeholder="Edad"> <br /><br />
+                    <input type="number" name="edad" placeholder="Edad"| value="<?php echo isset($edad) ? $edad : ''; ?>"> <br /><br />
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-3">
-                    <input type="text" name="direccion" placeholder="Direccion">
+                    <input type="text" name="direccion" placeholder="Direccion" value="<?php echo isset($direccion) ? $direccion : ''; ?>">
                 </div>
                 <div class="col-lg-3">
-                    <input type="text" name="email" placeholder="Email"><br /><br />
+                    <input type="text" name="email" placeholder="Email" value="<?php echo isset($email) ? $email : ''; ?>"><br /><br />
                 </div>
             </div>
             <div class="row">
@@ -51,8 +71,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-3">
-                    <input type="time" name="horario" placeholder="Horario de entrada"> <label>Horario de
-                        entrada</label>
+                    <input type="time" name="horario" placeholder="Horario de entrada" value="<?php echo isset($horario) ? $horario : ''; ?>"> <label>Horario de entrada</label>
 
                 </div>
                 <div class="col-lg-1">
@@ -65,7 +84,7 @@
 
             <div class="row">
                 <div class="col-lg-3">
-                    <input type="text" name="team" placeholder="Team">
+                <input type="text" name="team" placeholder="Team" value="<?php echo isset($team) ? $team : ''; ?>">
                 </div>
                 <div class="col-lg-1">
                     <input type="submit" value="✎" name="editar">
@@ -76,10 +95,10 @@
             </div>
             <div class="row">
                 <div class="col-lg-3">
-                    <input type="text" name="trainer" placeholder="Trainer">
+                <input type="text" name="trainer" placeholder="Trainer" value="<?php echo isset($trainer) ? $trainer : ''; ?>">
                 </div>
                 <div class="col-lg-3">
-                    <input type="number" name="cedula" placeholder="cedula">
+                <input type="number" name="cedula" placeholder="cedula" value="<?php echo isset($cedula) ? $cedula : ''; ?>">
                 </div>
             </div>
             <div class="row">
@@ -100,8 +119,6 @@
 
 
 <?php
-
-
 // Función para realizar una solicitud POST a la API ENVIAR AL SERVIDOR 
 function postData($url, $data)
 {
@@ -224,18 +241,9 @@ foreach ($arrayAsociativo as $item) {
         </div>';
 }
 
-if (isset($_POST['buscar'])) {
-    $cedula = $_POST["cedula"];
 
-    $url = "https://6480e391f061e6ec4d49fed8.mockapi.io/informacion/?cedula=" . urlencode($cedula);
-    $response = file_get_contents($url);
-    $data = json_decode($response, true);
-    $data = getData($url);
-    $arrayAsociativo = json_decode($data, true);
-    print_r($arrayAsociativo);
-    echo'<br>';
-    echo gettype($arrayAsociativo);
-}
+
+
 
 
 ?>
