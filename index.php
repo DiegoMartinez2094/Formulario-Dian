@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta http-equiv="refresh" content="20"> --> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <title>formulario</title>
@@ -90,8 +91,8 @@ if (isset($_POST['buscar'])) {
                     <input type="submit" value="✎" name="editar">
                 </div>
                 <div class="col-lg-1">
-                    <input type="submit" value="search" name="buscar">
-                </div> <br /><br />
+                    <input  type="submit" value="Buscar" name="buscar"  >
+                </div> <br/><br/>
             </div>
             <div class="row">
                 <div class="col-lg-3">
@@ -119,6 +120,7 @@ if (isset($_POST['buscar'])) {
 
 
 <?php
+
 // Función para realizar una solicitud POST a la API ENVIAR AL SERVIDOR 
 function postData($url, $data)
 {
@@ -150,21 +152,9 @@ function putData($url, $data)
     return file_get_contents($url, false, $config);
 }
 
-// Función para realizar una solicitud DELETE a la API ELIMINAR
-function deleteData($url)
-{
-    $credenciales["http"]["method"] = "DELETE";
-    $config = stream_context_create($credenciales);
-    return file_get_contents($url, false, $config);
-}
-
-
 $url = "https://6480e391f061e6ec4d49fed8.mockapi.io/informacion/";
 
 if (isset($_POST['crear'])) {
-
-
-
     $nombre = $_POST["nombre"];
     $apellidos = $_POST["apellidos"];
     $direccion = $_POST["direccion"];
@@ -186,11 +176,7 @@ if (isset($_POST['crear'])) {
         "team" => $team,
         "trainer" => $trainer,
     ];
-
     $response = postData($url, $newData);
-
-
-
 }
 
 // Obtener los datos 
@@ -241,9 +227,25 @@ foreach ($arrayAsociativo as $item) {
         </div>';
 }
 
-
-
-
-
-
+if (isset($_POST['eliminar'])){
+    $cedula = $_POST['cedula'];
+    $url = "https://6480e391f061e6ec4d49fed8.mockapi.io/informacion?cedula=" . urlencode($cedula); // Realizar la solicitud GET a la URL de búsqueda
+    $response = file_get_contents($url);
+    $data = json_decode($response, true);
+    if (!empty($data)) { // Verificar si se encontraron datos para la cédula ingresada
+        $id = $data[0]['id'];
+        $credenciales["http"]["method"] = "DELETE";
+        $config = stream_context_create($credenciales);
+        // Realizar la solicitud de eliminación al endpoint correspondiente
+        $url = "https://6480e391f061e6ec4d49fed8.mockapi.io/informacion/" . urlencode($id);
+        $response = file_get_contents($url, false, $config);   
+        // Procesar la respuesta y mostrar un mensaje de éxito o error
+        if ($response !== false) {
+            echo '<script language="javascript">alert("Los datos se eliminaron correctamente.");</script>';
+        } else {
+            echo '<script language="javascript">alert("No se encontraron datos para la cédula ingresada.");</script>';
+            
+        }
+    }
+};
 ?>
