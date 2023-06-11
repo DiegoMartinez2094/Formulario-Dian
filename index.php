@@ -5,32 +5,36 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <meta http-equiv="refresh" content="20"> --> 
+    <!-- <meta http-equiv="refresh" content="20"> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <title>formulario</title>
 </head>
-<?php 
+<?php
 //funcion buscar en informacion 
 if (isset($_POST['buscar'])) {
-    $cedula = $_POST['cedula'];
-    $url = "https://6480e391f061e6ec4d49fed8.mockapi.io//informacion?cedula=" . urlencode($cedula);
-    $response = file_get_contents($url);
-    $data = json_decode($response, true);
-    if (!empty($data)) {
-        $nombre = $data[0]['nombre'];
-        $apellido = $data[0]['apellido'];
-        $direccion = $data[0]['direccion'];
-        $edad = $data[0]['edad'];
-        $email = $data[0]['email'];
-        $horario = $data[0]['horario'];
-        $team = $data[0]['team'];
-        $trainer = $data[0]['trainer'];
+    if (!empty($_POST['cedula'])) {
+        $cedula = $_POST['cedula'];
+        $url = "https://6480e391f061e6ec4d49fed8.mockapi.io//informacion?cedula=" . urlencode($cedula);
+        $response = file_get_contents($url);
+        $data = json_decode($response, true);
+
+        if (!empty($data)) {
+            $nombre = $data[0]['nombre'];
+            $apellido = $data[0]['apellido'];
+            $direccion = $data[0]['direccion'];
+            $edad = $data[0]['edad'];
+            $email = $data[0]['email'];
+            $horario = $data[0]['horario'];
+            $team = $data[0]['team'];
+            $trainer = $data[0]['trainer'];
+        } else {
+            echo '<script language="javascript">alert("No se encontraron resultados.");</script>';
+        }
     }
-    if (empty($data))  
-    echo '<script language="javascript">alert("No se encontraron resultados.");</script>';  
-    }
+}
 ?>
+
 <body>
     <form method="POST">
         <div class="container">
@@ -42,7 +46,8 @@ if (isset($_POST['buscar'])) {
             </div>
             <div class="row">
                 <div class="col-lg-3">
-                    <input type="text" name="nombre" placeholder="Nombre" value="<?php echo isset($nombre) ? $nombre : ''; ?>" >
+                    <input type="text" name="nombre" placeholder="Nombre"
+                        value="<?php echo isset($nombre) ? $nombre : ''; ?>">
                 </div>
                 <div class="col-lg-3">
                     <h2>Campuslands</h2>
@@ -51,18 +56,22 @@ if (isset($_POST['buscar'])) {
             </div>
             <div class="row">
                 <div class="col-lg-3">
-                    <input type="text" name="apellidos" placeholder="Apellidos" value="<?php echo isset($apellido) ? $apellido : ''; ?>">
+                    <input type="text" name="apellidos" placeholder="Apellidos"
+                        value="<?php echo isset($apellido) ? $apellido : ''; ?>">
                 </div>
                 <div class="col-lg-3">
-                    <input type="number" name="edad" placeholder="Edad"| value="<?php echo isset($edad) ? $edad : ''; ?>"> <br /><br />
+                    <input type="number" name="edad" placeholder="Edad" |
+                        value="<?php echo isset($edad) ? $edad : ''; ?>"> <br /><br />
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-3">
-                    <input type="text" name="direccion" placeholder="Direccion" value="<?php echo isset($direccion) ? $direccion : ''; ?>">
+                    <input type="text" name="direccion" placeholder="Direccion"
+                        value="<?php echo isset($direccion) ? $direccion : ''; ?>">
                 </div>
                 <div class="col-lg-3">
-                    <input type="text" name="email" placeholder="Email" value="<?php echo isset($email) ? $email : ''; ?>"><br /><br />
+                    <input type="text" name="email" placeholder="Email"
+                        value="<?php echo isset($email) ? $email : ''; ?>"><br /><br />
                 </div>
             </div>
             <div class="row">
@@ -72,7 +81,8 @@ if (isset($_POST['buscar'])) {
             </div>
             <div class="row">
                 <div class="col-lg-3">
-                    <input type="time" name="horario" placeholder="Horario de entrada" value="<?php echo isset($horario) ? $horario : ''; ?>"> <label>Horario de entrada</label>
+                    <input type="time" name="horario" placeholder="Horario de entrada"
+                        value="<?php echo isset($horario) ? $horario : ''; ?>"> <label>Horario de entrada</label>
 
                 </div>
                 <div class="col-lg-1">
@@ -85,21 +95,23 @@ if (isset($_POST['buscar'])) {
 
             <div class="row">
                 <div class="col-lg-3">
-                <input type="text" name="team" placeholder="Team" value="<?php echo isset($team) ? $team : ''; ?>">
+                    <input type="text" name="team" placeholder="Team" value="<?php echo isset($team) ? $team : ''; ?>">
                 </div>
                 <div class="col-lg-1">
                     <input type="submit" value="✎" name="editar">
                 </div>
                 <div class="col-lg-1">
-                    <input  type="submit" value="Buscar" name="buscar"  >
-                </div> <br/><br/>
+                    <input type="submit" value="🔍" name="buscar">
+                </div> <br /><br />
             </div>
             <div class="row">
                 <div class="col-lg-3">
-                <input type="text" name="trainer" placeholder="Trainer" value="<?php echo isset($trainer) ? $trainer : ''; ?>">
+                    <input type="text" name="trainer" placeholder="Trainer"
+                        value="<?php echo isset($trainer) ? $trainer : ''; ?>">
                 </div>
                 <div class="col-lg-3">
-                <input type="number" name="cedula" placeholder="cedula" value="<?php echo isset($cedula) ? $cedula : ''; ?>">
+                    <input type="number" name="cedula" placeholder="cedula"
+                        value="<?php echo isset($cedula) ? $cedula : ''; ?>">
                 </div>
             </div>
             <div class="row">
@@ -155,28 +167,30 @@ function putData($url, $data)
 $url = "https://6480e391f061e6ec4d49fed8.mockapi.io/informacion/";
 
 if (isset($_POST['crear'])) {
-    $nombre = $_POST["nombre"];
-    $apellidos = $_POST["apellidos"];
-    $direccion = $_POST["direccion"];
-    $edad = $_POST["edad"];
-    $email = $_POST["email"];
-    $horario = $_POST["horario"];
-    $team = $_POST["team"];
-    $trainer = $_POST["trainer"];
-    $cedula = $_POST["cedula"];
+    if (!empty($_POST['cedula'])) {
+        $nombre = $_POST["nombre"];
+        $apellidos = $_POST["apellidos"];
+        $direccion = $_POST["direccion"];
+        $edad = $_POST["edad"];
+        $email = $_POST["email"];
+        $horario = $_POST["horario"];
+        $team = $_POST["team"];
+        $trainer = $_POST["trainer"];
+        $cedula = $_POST["cedula"];
 
-    $newData = [
-        "nombre" => $nombre,
-        "apellido" => $apellidos,
-        "edad" => $edad,
-        "cedula" => $cedula,
-        "direccion" => $direccion,
-        "email" => $email,
-        "horario" => $horario,
-        "team" => $team,
-        "trainer" => $trainer,
-    ];
-    $response = postData($url, $newData);
+        $newData = [
+            "nombre" => $nombre,
+            "apellido" => $apellidos,
+            "edad" => $edad,
+            "cedula" => $cedula,
+            "direccion" => $direccion,
+            "email" => $email,
+            "horario" => $horario,
+            "team" => $team,
+            "trainer" => $trainer,
+        ];
+        $response = postData($url, $newData);
+    }
 }
 
 // Obtener los datos 
@@ -227,25 +241,29 @@ foreach ($arrayAsociativo as $item) {
         </div>';
 }
 
-if (isset($_POST['eliminar'])){
-    $cedula = $_POST['cedula'];
-    $url = "https://6480e391f061e6ec4d49fed8.mockapi.io/informacion?cedula=" . urlencode($cedula); // Realizar la solicitud GET a la URL de búsqueda
-    $response = file_get_contents($url);
-    $data = json_decode($response, true);
-    if (!empty($data)) { // Verificar si se encontraron datos para la cédula ingresada
-        $id = $data[0]['id'];
-        $credenciales["http"]["method"] = "DELETE";
-        $config = stream_context_create($credenciales);
-        // Realizar la solicitud de eliminación al endpoint correspondiente
-        $url = "https://6480e391f061e6ec4d49fed8.mockapi.io/informacion/" . urlencode($id);
-        $response = file_get_contents($url, false, $config);   
-        // Procesar la respuesta y mostrar un mensaje de éxito o error
-        if ($response !== false) {
-            echo '<script language="javascript">alert("Los datos se eliminaron correctamente.");</script>';
-        } else {
-            echo '<script language="javascript">alert("No se encontraron datos para la cédula ingresada.");</script>';
-            
+if (isset($_POST['eliminar'])) {
+    if (!empty($_POST['cedula'])) {
+        $cedula = $_POST['cedula'];
+        $url = "https://6480e391f061e6ec4d49fed8.mockapi.io/informacion?cedula=" . urlencode($cedula);
+        $response = file_get_contents($url);
+        $data = json_decode($response, true);
+
+        if (!empty($data)) {
+            $id = $data[0]['id'];
+            $credenciales["http"]["method"] = "DELETE";
+            $config = stream_context_create($credenciales);
+            $url = "https://6480e391f061e6ec4d49fed8.mockapi.io/informacion/" . urlencode($id);
+            $response = file_get_contents($url, false, $config);
+            if ($response !== false) {
+                echo '<script language="javascript">alert("Los datos se eliminaron correctamente, en la próxima actualización de pagina se verán reflejados los cambios.");</script>';
+            } else {
+                echo '<script language="javascript">alert("No se encontraron datos para la cédula ingresada.");</script>';
+            }
         }
     }
-};
+}
+
+
+
+
 ?>
