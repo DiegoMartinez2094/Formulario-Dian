@@ -105,6 +105,29 @@ if (isset($_POST['buscar'])) {
     }
 }
 /**--------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+/**funcion subir  */
+if (isset($_POST['subir'])) {
+    if (!empty($_POST['cedula'])) {
+        $cedula = $_POST['cedula'];
+        $url = "https://6480e391f061e6ec4d49fed8.mockapi.io//informacion?cedula=" . urlencode($cedula);
+        $response = file_get_contents($url);
+        $data = json_decode($response, true);
+
+        if (!empty($data)) {
+            $nombre = $data[0]['nombre'];
+            $apellido = $data[0]['apellido'];
+            $direccion = $data[0]['direccion'];
+            $edad = $data[0]['edad'];
+            $email = $data[0]['email'];
+            $horario = $data[0]['horario'];
+            $team = $data[0]['team'];
+            $trainer = $data[0]['trainer'];
+        } else {
+            echo '<h1>No se encontraron resultados.</h1>';
+        }
+    }
+}
 ?>
 
 <body>
@@ -281,7 +304,11 @@ echo '<tr>
             <td>' . $item['email'] . '</td>
             <td>' . $item['horario'] . '</td>
             <td>' . $item['team'] . '</td>
-            <td>' . $item['trainer'] . '&nbsp &nbsp <input type="button" value="↑" name="editar"></td>
+            <td>' . $item['trainer'] .'</td>
+            <td><form method="POST" action="">
+            <input type="hidden" name="cedula" value="' . $item['cedula'] . '">
+            <input type="submit" value="↑" name="subir">
+        </form></td>
         </tr>';
 }
 echo '</tbody>
